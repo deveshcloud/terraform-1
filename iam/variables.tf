@@ -1,9 +1,7 @@
-variable "name" {
-  description = "The name of the IAM user"
-  type        = string
+variable "ec2_instance_type" {
+  type = string
 }
 
-variable "policy" {
-  description = "The policy to attach to the IAM user"
-  type        = string
+variable "image_id" {
+  type = string
 }
