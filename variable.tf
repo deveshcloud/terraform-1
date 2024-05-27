@@ -29,3 +29,14 @@ variable "public_subnet_cidr" {
 variable "public_subnet_name" {
   type = string
 }
+
+
+## ec2 variables
+
+variable "ami_id" {
+  type = string
+}
+
+variable "instance_type" {
+  type = string
+}
