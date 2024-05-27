@@ -1,5 +1,6 @@
 # main.tf
 provider "aws" {
+alias ="deveshcloud"
   region = "ap-south-1"
 }
 
