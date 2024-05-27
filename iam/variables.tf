@@ -1,7 +1,3 @@
-variable "ec2_instance_type" {
-  type = string
-}
-
-variable "image_id" {
+variable "role" {
   type = string
 }
