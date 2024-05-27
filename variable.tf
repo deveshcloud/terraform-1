@@ -1,6 +1,6 @@
 
 ## s3 variables
-variable "bucket" {
+/*variable "bucket" {
   type = string
 }
 
@@ -28,7 +28,7 @@ variable "public_subnet_cidr" {
 
 variable "public_subnet_name" {
   type = string
-}
+}*/
 
 
 ## ec2 variables
