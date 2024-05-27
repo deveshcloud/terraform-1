@@ -1,14 +1,14 @@
-# modules/ec2_instance/main.tf
-resource "aws_instance" "this" {
+# Create a security group to allow SSH and HTTP access
+
+# Create an EC2 instance
+resource "aws_instance" "web" {
   ami           = var.ami
   instance_type = var.instance_type
-  key_name      = var.key_name
-  subnet_id     = var.subnet_id
+  subnet_id     = var.subnetid
+  availability_zone = "ap-south-1a"
+  #security_groups = [aws_security_group.instance_sg.name]
 
-  tags = merge(
-    var.tags,
-    {
-      "Name" = var.instance_name
-    }
-  )
+  tags = {
+    Name = "web-instance"
+  }
 }
