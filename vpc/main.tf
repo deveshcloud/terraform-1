@@ -1,53 +1,49 @@
+# Create a VPC
 resource "aws_vpc" "main" {
-  cidr_block           = var.cidr_block
-  enable_dns_support   = true
-  enable_dns_hostnames = true
+  cidr_block = var.cidr
   tags = {
-    Name = var.name
+    Name = var.vpc_name
   }
 }
 
+## creating of subnet
+# Create a public subnet
 resource "aws_subnet" "public" {
-  count                   = length(var.public_subnets)
-  vpc_id                  = aws_vpc.main.id
-  cidr_block              = element(var.public_subnets, count.index)
+  vpc_id     = aws_vpc.main.id
+  cidr_block = var.public_subnet_cidr
   map_public_ip_on_launch = true
-  availability_zone       = element(var.azs, count.index)
+  availability_zone = "ap-south-1a"
   tags = {
-    Name = "${var.name}-public-${count.index + 1}"
+    Name = var.public_subnet_name
   }
 }
 
-resource "aws_subnet" "private" {
-  count             = length(var.private_subnets)
-  vpc_id            = aws_vpc.main.id
-  cidr_block        = element(var.private_subnets, count.index)
-  availability_zone = element(var.azs, count.index)
-  tags = {
-    Name = "${var.name}-private-${count.index + 1}"
-  }
-}
 
+# Create an Internet Gateway
 resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.main.id
   tags = {
-    Name = "${var.name}-igw"
+    Name = "main-igw"
   }
 }
 
+# Create a route table
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.main.id
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.gw.id
-  }
   tags = {
-    Name = "${var.name}-public-rt"
+    Name = "public-rt"
   }
 }
 
-resource "aws_route_table_association" "public" {
-  count          = length(var.public_subnets)
-  subnet_id      = element(aws_subnet.public.*.id, count.index)
+# Create a route to the Internet Gateway
+resource "aws_route" "internet_access" {
+  route_table_id         = aws_route_table.public.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.gw.id
+}
+
+# Associate the route table with the public subnet
+resource "aws_route_table_association" "public_assoc" {
+  subnet_id      = aws_subnet.public.id
   route_table_id = aws_route_table.public.id
 }
