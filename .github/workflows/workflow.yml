@@ -50,9 +50,9 @@ jobs:
     # Generates an execution plan for Terraform
     - name: Terraform Plan
       run: terraform plan -input=false 
-      working-directory: ./terraform-1
+      working-directory: ./
 
       # On push to "main", build or change infrastructure according to Terraform configuration files
     - name: Terraform Apply
       run: terraform apply -auto-approve
-      working-directory: ./terraform-1
+      working-directory: ./
